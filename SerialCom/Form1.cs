@@ -34,7 +34,7 @@ namespace SerialCom
 
             //检查是否含有串口
             string[] str = SerialPort.GetPortNames();
-            if (str == null)
+            if (str == null || str.Length == 0)
             {
                 MessageBox.Show("本机没有串口！", "Error");
                 return;
@@ -45,7 +45,10 @@ namespace SerialCom
                 comboBoxCom.Items.Add(s);
             }
             //设置默认串口选项
-            comboBoxCom.SelectedIndex = 0;
+            if (comboBoxCom.Items.Count > 0)
+            {
+                comboBoxCom.SelectedIndex = 0;
+            }
 
             /*------波特率设置-------*/
             string[] baudRate = { "9600", "19200", "38400", "57600", "115200" };
@@ -375,7 +378,7 @@ namespace SerialCom
             comboBoxCom.Items.Clear();
             
             string[] str = SerialPort.GetPortNames();
-            if (str == null)
+            if (str == null || str.Length == 0)
             {
                 MessageBox.Show("本机没有串口！", "Error");
                 return;
@@ -388,7 +391,10 @@ namespace SerialCom
             }
 
             //设置默认串口
-            comboBoxCom.SelectedIndex = 0;
+            if (comboBoxCom.Items.Count > 0)
+            {
+                comboBoxCom.SelectedIndex = 0;
+            }
             comboBoxBaudRate.SelectedIndex = 0;
             comboBoxDataBit.SelectedIndex = 3;
             comboBoxCheckBit.SelectedIndex = 0;
@@ -431,9 +437,9 @@ namespace SerialCom
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Txt |*.txt";
             saveFileDialog.Title = "保存接收到的数据到文件中";
-            saveFileDialog.ShowDialog();
 
-            if (saveFileDialog.FileName != null)
+            if (saveFileDialog.ShowDialog() == DialogResult.OK &&
+                !string.IsNullOrEmpty(saveFileDialog.FileName))
             {
                 saveDataFile = saveFileDialog.FileName;
             }
